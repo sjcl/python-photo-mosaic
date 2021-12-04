@@ -5,8 +5,12 @@ import sys
 
 import numpy as np
 from PIL import Image
-from skimage import img_as_float
-from skimage.measure import compare_mse
+from skimage import img_as_float, metrics
+
+from PIL import Image
+import glob, os
+
+Image.MAX_IMAGE_PIXELS = 10000000000
 
 def shuffle_first_items(lst, i):
     if not i:
@@ -32,7 +36,7 @@ class ProgressCounter:
 def img_mse(im1, im2):
     """Calculates the root mean square error (RSME) between two images"""
     try:
-        return compare_mse(img_as_float(im1), img_as_float(im2))
+        return metrics.mean_squared_error(img_as_float(im1), img_as_float(im2))
     except ValueError:
         print(f'RMS issue, Img1: {im1.size[0]} {im1.size[1]}, Img2: {im2.size[0]} {im2.size[1]}')
         raise KeyboardInterrupt
@@ -209,13 +213,13 @@ def coords_from_middle(x_count, y_count, y_bias=1, shuffle_first=0, ):
     return coords
     
 
-def create_mosaic(source_path, target, tile_ratio=1920/800, tile_width=75, enlargement=8, reuse=True, color_mode='RGB', tile_paths=None, shuffle_first=30):
+def create_mosaic(subject, target, tile_ratio=1920/800, tile_width=75, enlargement=8, reuse=True, color_mode='RGB', tile_paths=None, shuffle_first=30):
     """Forms an mosiac from an original image using the best
     tiles provided. This reads, processes, and keeps in memory
     a copy of the source image, and all the tiles while processing.
 
     Arguments:
-    source_path -- filepath to the source image for the mosiac
+    subject -- filepath to the source image for the mosiac
     target -- filepath to save the mosiac
     tile_ratio -- height/width of mosaic tiles in pixels
     tile_width -- width of mosaic tiles in pixels
@@ -235,13 +239,14 @@ def create_mosaic(source_path, target, tile_ratio=1920/800, tile_width=75, enlar
     )
     # Pull in and Process Original Image
     print('Setting Up Target image')
-    source_image = SourceImage(source_path, config)
+    source_image = SourceImage(subject, config)
 
     # Setup Mosaic
     mosaic = MosaicImage(source_image.image, target, config)
 
     # Assest Tiles, and save if needed, returns directories where the small and large pictures are stored
     print('Assessing Tiles')
+    tile_paths = glob.glob(os.path.join(tile_paths, "*"))
     tile_box = TileBox(tile_paths, config)
 
     try:
