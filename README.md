@@ -16,7 +16,7 @@ As well as an image to use for the photo-mosaic ([most common image formats are 
 create_mosaic(
     subject="/path/to/source/image", 
     target="/path/to/output/image", 
-    tile_paths=["/path/to/tile_1" , ... "/path/to/tile_n"],
+    tile_path="/path/to/tiles/folder",
     tile_ratio=1920/800, # Crop tiles to be height/width ratio
     tile_width=300, # Tile will be scaled
     enlargement=20, # Mosiac will be this times larger than original
@@ -51,9 +51,9 @@ Changed from original project (https://github.com/codebox/mosaic):
 *   ability to input color mode
 
 Tested with:
-*   Python 3.6.5
-*   numpy==1.14.4
-*   Pillow==5.1.0
-*   scikit-image==0.14.1
+*   Python 3.9.7
+*   numpy==1.21.4
+*   Pillow==8.4.0
+*   scikit-image==0.18.3
 
 
