@@ -213,7 +213,7 @@ def coords_from_middle(x_count, y_count, y_bias=1, shuffle_first=0, ):
     return coords
     
 
-def create_mosaic(subject, target, tile_ratio=1920/800, tile_width=75, enlargement=8, reuse=True, color_mode='RGB', tile_paths=None, shuffle_first=30):
+def create_mosaic(subject, target, tile_ratio=1920/800, tile_width=75, enlargement=8, reuse=True, color_mode='RGB', tile_path=None, shuffle_first=30):
     """Forms an mosiac from an original image using the best
     tiles provided. This reads, processes, and keeps in memory
     a copy of the source image, and all the tiles while processing.
@@ -226,7 +226,7 @@ def create_mosaic(subject, target, tile_ratio=1920/800, tile_width=75, enlargeme
     enlargement -- mosaic image will be this many times wider and taller than the original
     reuse -- Should we reuse tiles in the mosaic, or just use each tile once?
     color_mode -- L for greyscale or RGB for color
-    tile_paths -- List of filepaths to your tiles
+    tile_path -- List of filepaths to your tiles
     shuffle_first -- Mosiac will be filled out starting in the center for best effect. Also, 
         we will shuffle the order of assessment so that all of our best images aren't 
         necessarily in one spot.
@@ -246,7 +246,7 @@ def create_mosaic(subject, target, tile_ratio=1920/800, tile_width=75, enlargeme
 
     # Assest Tiles, and save if needed, returns directories where the small and large pictures are stored
     print('Assessing Tiles')
-    tile_paths = glob.glob(os.path.join(tile_paths, "*"))
+    tile_paths = glob.glob(os.path.join(tile_path, "*"))
     tile_box = TileBox(tile_paths, config)
 
     try:
